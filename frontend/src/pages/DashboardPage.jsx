@@ -64,17 +64,6 @@ function DashboardPage() {
     }
   };
 
-  const handleUnpublish = async () => {
-    try {
-      await unpublishProject();
-      setPublishMessage('🔄 تم إلغاء النشر، يمكنك التعديل الآن');
-      fetchProject();
-      // لا يوجد انتقال إلى صفحة أخرى
-    } catch (err) {
-      setPublishMessage('❌ حدث خطأ');
-    }
-  };
-
   const handleDeleteSection = async (sectionId) => {
     if (window.confirm('هل أنت متأكد من حذف هذا القسم؟')) {
       try {
@@ -164,17 +153,13 @@ function DashboardPage() {
         </div>
       </section>
 
-      {/* 3. أزرار النشر */}
+      {/* 3. زر "نشر" فقط */}
       <section style={{ background: '#e9ecef', padding: '20px', borderRadius: '10px', marginBottom: '30px', textAlign: 'center' }}>
         <h3>🚀 حالة الموقع: {isPublished ? '🔒 منشور (للزوار فقط)' : '✏️ وضع التحرير'}</h3>
         <div style={{ marginTop: '15px' }}>
-          {!isPublished ? (
+          {!isPublished && (
             <button onClick={handlePublish} style={{ background: '#28a745', color: 'white', padding: '12px 30px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '18px' }}>
               🚀 نشر الموقع الآن
-            </button>
-          ) : (
-            <button onClick={handleUnpublish} style={{ background: '#dc3545', color: 'white', padding: '12px 30px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '18px' }}>
-              🔧 إلغاء النشر (تعديل)
             </button>
           )}
           {publishMessage && <p style={{ marginTop: '10px', fontWeight: 'bold' }}>{publishMessage}</p>}
