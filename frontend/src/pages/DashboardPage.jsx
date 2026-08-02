@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import API, { getProject, updateProject, publishProject, unpublishProject } from '../api';
+import API, { getProject, updateProject, publishProject } from '../api';
 import AddSectionModal from '../components/AddSectionModal';
 import EditSectionModal from '../components/EditSectionModal';
 
@@ -75,8 +75,6 @@ function DashboardPage() {
       }
     }
   };
-
-  const isPublished = project?.isPublished || false;
 
   const getImageUrl = (coverImage) => {
     if (!coverImage) return '';
@@ -153,15 +151,12 @@ function DashboardPage() {
         </div>
       </section>
 
-      {/* 3. زر "نشر" فقط */}
+      {/* 3. زر "نشر" فقط (بدون رسالة حالة الموقع) */}
       <section style={{ background: '#e9ecef', padding: '20px', borderRadius: '10px', marginBottom: '30px', textAlign: 'center' }}>
-        <h3>🚀 حالة الموقع: {isPublished ? '🔒 منشور (للزوار فقط)' : '✏️ وضع التحرير'}</h3>
         <div style={{ marginTop: '15px' }}>
-          {!isPublished && (
-            <button onClick={handlePublish} style={{ background: '#28a745', color: 'white', padding: '12px 30px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '18px' }}>
-              🚀 نشر الموقع الآن
-            </button>
-          )}
+          <button onClick={handlePublish} style={{ background: '#28a745', color: 'white', padding: '12px 30px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '18px' }}>
+            🚀 نشر الموقع الآن
+          </button>
           {publishMessage && <p style={{ marginTop: '10px', fontWeight: 'bold' }}>{publishMessage}</p>}
         </div>
       </section>
