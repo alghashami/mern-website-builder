@@ -3,12 +3,17 @@ const { v4: uuidv4 } = require('uuid');
 
 // جلب بيانات المشروع (للوحة التحكم)
 exports.getProject = async (req, res) => {
-  let project = await Project.findOne();
-  if (!project) {
-    project = new Project({ projectId: uuidv4().slice(0, 8) });
-    await project.save();
+  try {
+    let project = await Project.findOne();
+    if (!project) {
+      project = new Project({ projectId: uuidv4().slice(0, 8) });
+      await project.save();
+    }
+    res.json(project);
+  } catch (err) {
+    console.error('❌ Error in getProject:', err);
+    res.status(500).json({ error: err.message });
   }
-  res.json(project);
 };
 
 // إنشاء مشروع جديد (مع projectId فريد)
@@ -19,6 +24,7 @@ exports.createProject = async (req, res) => {
     await newProject.save();
     res.status(201).json(newProject);
   } catch (err) {
+    console.error('❌ Error in createProject:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -30,6 +36,7 @@ exports.getProjectBySlug = async (req, res) => {
     if (!project) return res.status(404).json({ msg: 'المشروع غير موجود' });
     res.json(project);
   } catch (err) {
+    console.error('❌ Error in getProjectBySlug:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -48,6 +55,7 @@ exports.updateProject = async (req, res) => {
     await project.save();
     res.json(project);
   } catch (err) {
+    console.error('❌ Error in updateProject:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -55,19 +63,36 @@ exports.updateProject = async (req, res) => {
 // نشر الموقع (إخفاء أدوات التحرير)
 exports.publishProject = async (req, res) => {
   try {
+    console.log('🔍 Publish project called');
+    
     let project = await Project.findOne();
+    console.log('📦 Project found:', project);
+    
     if (!project) {
+      console.log('⚠️ No project found, creating new one');
       project = new Project({ projectId: uuidv4().slice(0, 8) });
+      await project.save();
+      console.log('✅ New project created:', project.projectId);
     }
+    
+    // التأكد من وجود projectId
+    if (!project.projectId) {
+      console.log('⚠️ Project has no projectId, adding one');
+      project.projectId = uuidv4().slice(0, 8);
+    }
+    
     project.isPublished = true;
     await project.save();
+    console.log('✅ Project published successfully');
+    
     res.json({ 
       message: '✅ تم نشر الموقع بنجاح!', 
       isPublished: true,
       projectId: project.projectId 
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('❌ Error in publishProject:', err);
+    res.status(500).json({ error: err.message, stack: err.stack });
   }
 };
 
