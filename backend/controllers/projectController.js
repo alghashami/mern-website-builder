@@ -14,7 +14,7 @@ exports.getProject = async (req, res) => {
 // إنشاء مشروع جديد (مع projectId فريد)
 exports.createProject = async (req, res) => {
   try {
-    const projectId = uuidv4().slice(0, 8); // ID قصير مثل "a1b2c3d4"
+    const projectId = uuidv4().slice(0, 8);
     const newProject = new Project({ projectId });
     await newProject.save();
     res.status(201).json(newProject);
@@ -77,11 +77,13 @@ exports.unpublishProject = async (req, res) => {
     console.log('🔍 Unpublish project called');
     
     let project = await Project.findOne();
-    console.log('📦 Project found:', project);
     
-    if (!project) {
-      console.log('⚠️ No project found, creating new one');
-      project = new Project({ projectId: uuidv4().slice(0, 8) });
+    // إذا لم يكن هناك مشروع، أو كان المشروع بدون projectId، أنشئ واحداً جديداً
+    if (!project || !project.projectId) {
+      console.log('⚠️ No valid project found, creating new one');
+      project = new Project({ 
+        projectId: uuidv4().slice(0, 8)
+      });
       await project.save();
       console.log('✅ New project created:', project.projectId);
     }
