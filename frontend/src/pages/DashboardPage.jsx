@@ -56,8 +56,8 @@ function DashboardPage() {
       
       if (projectId) {
         setTimeout(() => {
-          window.location.href = `/site/${projectId}`;
-        }, 2000);
+          window.location.href = `/`;
+        }, 1500);
       }
     } catch (err) {
       setPublishMessage('❌ حدث خطأ أثناء النشر');
@@ -69,6 +69,7 @@ function DashboardPage() {
       await unpublishProject();
       setPublishMessage('🔄 تم إلغاء النشر، يمكنك التعديل الآن');
       fetchProject();
+      // لا يوجد انتقال إلى صفحة أخرى
     } catch (err) {
       setPublishMessage('❌ حدث خطأ');
     }
