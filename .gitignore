@@ -1,0 +1,20 @@
+# تجاهل مجلدات الـ Node.js (ثقيلة جداً)
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# تجاهل ملفات البيئة السرية (تحتوي على كلمة مرور MongoDB)
+backend/.env
+.env
+
+# تجاهل الصور المرفوعة (لتقليل الحجم)
+backend/uploads/
+
+# تجاهل مجلدات البناء (Build)
+backend/dist/
+frontend/build/
+frontend/dist/
+
+# ملفات النظام
+.DS_Store
+Thumbs.db
